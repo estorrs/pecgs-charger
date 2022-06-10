@@ -7,9 +7,6 @@ hotspot3d_clusters:
 inheritance_gene_list:
   class: File
   path: a/file/path
-out_dir:
-  class: Directory
-  path: a/dir/path
 pathogenic_variants:
   class: File
   path: a/file/path
