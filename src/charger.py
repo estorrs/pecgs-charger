@@ -123,8 +123,8 @@ def run_charger(
     charger_out_fp = os.path.join(charger_out, 'test.charged.tsv')
     cmd = run_charger(
         preprocessed_vcf, charger_out_fp, args.inheritance_gene_list,
-    ¦   args.pp2_gene_list, args.pathogenic_variants, args.hotspot3d_clusters,
-    ¦   args.clinvar_alleles, rare_threshold=args.rare_threshold)
+        args.pp2_gene_list, args.pathogenic_variants, args.hotspot3d_clusters,
+        args.clinvar_alleles, rare_threshold=args.rare_threshold)
     logging.info('executing command: {c}'.format(c=cmd))
     output = subprocess.check_output(cmd, shell=True)
     logging.info('step output: {o}'.format(o=output))
