@@ -1,0 +1,23 @@
+clinvar_alleles:
+  class: File
+  path: a/file/path
+hotspot3d_clusters:
+  class: File
+  path: a/file/path
+inheritance_gene_list:
+  class: File
+  path: a/file/path
+out_dir:
+  class: Directory
+  path: a/dir/path
+pathogenic_variants:
+  class: File
+  path: a/file/path
+pp2_gene_list:
+  class: File
+  path: a/file/path
+rare_threshold: a float
+sample: a_string
+vcf:
+  class: File
+  path: a/file/path
