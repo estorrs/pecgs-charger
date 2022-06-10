@@ -16,7 +16,6 @@ pathogenic_variants:
 pp2_gene_list:
   class: File
   path: a/file/path
-rare_threshold: a float
 sample: a_string
 vcf:
   class: File
