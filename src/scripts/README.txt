@@ -2,7 +2,7 @@
 ## Germline workflow for PECGS pipeline 			##
 ## Steps from TinJasmine to CharGer 				##
 ## Contact: Fernanda Martins Rodrigues (fernanda@wustl.edu)	##
-## Date modified: 05122022					##
+## Date modified: 06122022					##
 ##################################################################
 
 
@@ -20,7 +20,8 @@ This VCF has already been through the following filters:
 
 	- Script:  Scripts/format_vcf_for_CharGer.py
 	- Command:
-
+	
+	$ cd /diskmnt/Projects/Users/fernanda/Projects/PECGS/PECGS_pipeline_CharGer/
 	$ python Scripts/format_vcf_for_CharGer.py -i Anlysis/test.vcf.gz -O Analysis/1.Preprocess_TinJasmine
 
 	- Output: Analysis/1.Preprocess_TinJasmine/test.infofixed.vcf
@@ -41,10 +42,10 @@ This VCF has already been through the following filters:
 	- Script: /diskmnt/Projects/Users/fernanda/Projects/PECGS/PECGS_pipeline_CharGer/Scripts/post_CharGer.py
 	- Command:
 
-	$ nohup python Scripts/post_CharGer.py -i Analysis/1.Preprocess_TinJasmine/test.infoFixed.vcf -c Analysis/2.CharGer/test.charged.tsv -s C3L-00081 -O Analysis/3.PostCharGer/ 1>Analysis/Logs/test.postCharGer.out 2>Analysis/Logs/test.postCharGer.err &
+	$ nohup python Scripts/post_CharGer.py -i Analysis/1.Preprocess_TinJasmine/test.infoFixed.vcf -c Analysis/2.CharGer/test.charged.tsv -d LSCC -s C3L-00081 -O Analysis/3.PostCharGer/ 1>Analysis/Logs/test.postCharGer.out 2>Analysis/Logs/test.postCharGer.err &
 
 
-# Step 4: filter out synonymous variants and variants with low CharGer score (< 4); also create a file containing only rare variants (MAF ≤ 0.05%)
+# Step 4: filter out synonymous variants, variants classified as Benign or Likely Benign,  and variants with low CharGer score (<= 4); also create a file containing only rare variants (MAF ≤ 0.05%)
 
 	- Script: /diskmnt/Projects/Users/fernanda/Projects/PECGS/PECGS_pipeline_CharGer/Scripts/filter_CharGer.py
 	- Command:

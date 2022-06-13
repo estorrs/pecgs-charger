@@ -1,21 +1,22 @@
 #!/usr/bin/env python
 
-#title	  :post_CharGer.py
+#title	 :post_CharGer.py
 #author	 :Fernanda Martins Rodrigues (fernanda@wustl.edu)
-#date	   :20220501
+#date	 :06112022
 
 """
 	This script fixes the HGVSc and HGVSp annotations output from CharGer, which can be problematic, and pulls allele frequency information from
 	1000 Genomes, ExAC, and gnomAD.
 	It pulls these annotations from the VEP annotation, present in the VCF_Details colum of the CharGer output.
 	It also parses the CharGer output file and its corresponding VCF file, combining genotype information from VCF to CharGer output.
-	
+
 	Usage:
-		python post_CharGer.py [-h] -i <input VCF file> -c <input CharGer tsv file> -s <sample ID> -O <output directory>
+		python post_CharGer.py [-h] -i <input VCF file> -c <input CharGer tsv file> -d <disease - optional> -s <sample ID> -O <output directory>
 
 	Arguments:
 		-i, --inputVCF:			input VCF file
 		-c, --charger:			charger output tsv file corresponding to input VCF file
+		-d, --disease:			disease; optional
 		-s, --sampleID:	  		sample ID to add to output file and output file name
 		-O, --outputDirectory:  directory to write output files to
 
@@ -26,6 +27,7 @@ import argparse
 import getopt
 import os
 import re
+import gzip
 
 def argument_parser():
 	# create parser
@@ -33,12 +35,14 @@ def argument_parser():
 	# add arguments
 	parser.add_argument("-i", "--inputVCF", required=True, help="input VCF file")
 	parser.add_argument("-c", "--charger", required=True, help="charger output tsv file corresponding to input VCF file")
+	parser.add_argument("-d", "--disease", required=False, help="optional disease parameter; this will add a column 'Disease' to the output file")
 	parser.add_argument("-s", "--sampleID", required=True, help="sample ID to add to output file and output file name")
 	parser.add_argument("-O", "--outputDirectory", required=True, help="directory to write output files to")
 
 	args = vars(parser.parse_args())
 	inputVCF = args["inputVCF"]
 	charger = args["charger"]
+	disease = args["disease"]
 	sampleID = args["sampleID"]
 	outputDirectory = args["outputDirectory"]
 
@@ -48,7 +52,7 @@ def argument_parser():
 	if not os.path.exists(outputDirectory):
 		os.makedirs(outputDirectory)
 
-	return inputVCF, charger, sampleID, outputDirectory
+	return inputVCF, charger, disease, sampleID, outputDirectory
 
 
 ###############
@@ -225,7 +229,7 @@ def get_vep_header(vcf_lines):
 ###############
 
 def main():
-	inputVCF, charger, sampleID, outputDirectory = argument_parser()
+	inputVCF, charger, disease, sampleID, outputDirectory = argument_parser()
 
 	# Open input files
 	if ".gz" in inputVCF:
@@ -250,7 +254,10 @@ def main():
 
 	# Header for output file
 	charger_header=tsv.readline().strip().split("\t")
-	out_header = "Sample\tHUGO_Symbol\tChromosome\tStart\tStop\tReference\tAlternate\tVariant_Classification\tHGVSg\tHGVSc\tHGVSc_short\tHGVSp\tHGVSp_short\tAllele_Frequency\tVEP_Most_Severe_Consequence\tPositive_Evidence\tNegative_Evidence\tPositive_CharGer_Score\tNegative_CharGer_Score\tCharGer_Score\tClinVar_Pathogenicity\tACMG_Classification\tCharGer_Classification\tPubMed_Link\tClinVar_Traits\tCharGer_Summary\tVCF_Details\tGenotype\t1KGenomes_AF\tExAC_AF\tgnomAD_AF\n"
+	if disease:
+		out_header = "Sample\tDisease\tHUGO_Symbol\tChromosome\tStart\tStop\tReference\tAlternate\tVariant_Classification\tHGVSg\tHGVSc\tHGVSc_short\tHGVSp\tHGVSp_short\tAllele_Frequency\tVEP_Most_Severe_Consequence\tPositive_Evidence\tNegative_Evidence\tPositive_CharGer_Score\tNegative_CharGer_Score\tCharGer_Score\tClinVar_Pathogenicity\tACMG_Classification\tCharGer_Classification\tPubMed_Link\tClinVar_Traits\tCharGer_Summary\tVCF_Details\tGenotype\t1KGenomes_AF\tExAC_AF\tgnomAD_AF\n"
+	else:
+		out_header = "Sample\tHUGO_Symbol\tChromosome\tStart\tStop\tReference\tAlternate\tVariant_Classification\tHGVSg\tHGVSc\tHGVSc_short\tHGVSp\tHGVSp_short\tAllele_Frequency\tVEP_Most_Severe_Consequence\tPositive_Evidence\tNegative_Evidence\tPositive_CharGer_Score\tNegative_CharGer_Score\tCharGer_Score\tClinVar_Pathogenicity\tACMG_Classification\tCharGer_Classification\tPubMed_Link\tClinVar_Traits\tCharGer_Summary\tVCF_Details\tGenotype\t1KGenomes_AF\tExAC_AF\tgnomAD_AF\n"
 
 	outFile.write(out_header)
 
@@ -287,7 +294,11 @@ def main():
 		kgMAF, exacMAF, gnomadMAF = get_MAFs(charger_header, vep, line)
 
 		# write out to output file
-		out_line = sampleID + '\t' + '\t'.join(line[0:8])+'\t'+hgvsc_vep+'\t'+hgvsc_short+'\t'+hgvsp_vep+'\t'+hgvsp_short+'\t'+'\t'.join(line[10:])+'\t'+genotype+'\t'+kgMAF+'\t'+exacMAF+'\t'+gnomadMAF+'\n'
+		if disease:
+			out_line = sampleID + '\t' + disease + '\t' + '\t'.join(line[0:8])+'\t'+hgvsc_vep+'\t'+hgvsc_short+'\t'+hgvsp_vep+'\t'+hgvsp_short+'\t'+'\t'.join(line[10:])+'\t'+genotype+'\t'+kgMAF+'\t'+exacMAF+'\t'+gnomadMAF+'\n'
+		else:
+			out_line = sampleID + '\t' + '\t'.join(line[0:8])+'\t'+hgvsc_vep+'\t'+hgvsc_short+'\t'+hgvsp_vep+'\t'+hgvsp_short+'\t'+'\t'.join(line[10:])+'\t'+genotype+'\t'+kgMAF+'\t'+exacMAF+'\t'+gnomadMAF+'\n'
+
 		outFile.write(out_line)
 
 
@@ -295,6 +306,5 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
 
 
