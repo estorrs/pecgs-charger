@@ -110,6 +110,8 @@ def filter_charger(filter_charger_script, post_charger_out, sample,
 
 def run_charger(
         args, preprocess_out, charger_out, post_charger_out, filter_charger_out):
+    root = args.vcf.split('/')[-1].split('.vcf')[0]
+
     logging.info('step 1: preprocess vcf')
     cmd = prepare_tinjasmine_vcf(args.format_vcf_script, args.vcf, preprocess_out)
     logging.info('executing command: {c}'.format(c=cmd))
@@ -117,8 +119,8 @@ def run_charger(
     logging.info('step output: {o}'.format(o=output))
 
     logging.info('step 2: run charger')
-    preprocessed_vcf = os.path.join(preprocess_out, 'test.infofixed.vcf')
-    charger_out_fp = os.path.join(charger_out, 'test.charged.tsv')
+    preprocessed_vcf = os.path.join(preprocess_out, '{r}.infofixed.vcf'.format(r=root))
+    charger_out_fp = os.path.join(charger_out, '{r}.charged.tsv'.format(r=root))
     cmd = execute_charger(
         preprocessed_vcf, charger_out_fp, args.inheritance_gene_list,
         args.pp2_gene_list, args.pathogenic_variants, args.hotspot3d_clusters,
