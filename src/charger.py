@@ -62,7 +62,7 @@ def prepare_tinjasmine_vcf(format_vcf_script, vcf, out_dir):
     return cmd
 
 
-def run_charger(preprocessed_vcf, output_fp, inheritance_gene_list,
+def execute_charger(preprocessed_vcf, output_fp, inheritance_gene_list,
                 pp2_gene_list, pathogenic_variants, hotspot3d_clusters,
                 clinvar_alleles, rare_threshold=.0005):
     pieces = [
@@ -119,7 +119,7 @@ def run_charger(
     logging.info('step 2: run charger')
     preprocessed_vcf = os.path.join(preprocess_out, 'test.infofixed.vcf')
     charger_out_fp = os.path.join(charger_out, 'test.charged.tsv')
-    cmd = run_charger(
+    cmd = execute_charger(
         preprocessed_vcf, charger_out_fp, args.inheritance_gene_list,
         args.pp2_gene_list, args.pathogenic_variants, args.hotspot3d_clusters,
         args.clinvar_alleles, rare_threshold=args.rare_threshold)
