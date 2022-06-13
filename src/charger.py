@@ -119,7 +119,7 @@ def run_charger(
     logging.info('step output: {o}'.format(o=output))
 
     logging.info('step 2: run charger')
-    preprocessed_vcf = os.path.join(preprocess_out, '{r}.infofixed.vcf'.format(r=root))
+    preprocessed_vcf = os.path.join(preprocess_out, '{r}.infoFixed.vcf'.format(r=root))
     charger_out_fp = os.path.join(charger_out, '{r}.charged.tsv'.format(r=root))
     cmd = execute_charger(
         preprocessed_vcf, charger_out_fp, args.inheritance_gene_list,
