@@ -140,7 +140,7 @@ def run_charger(
     logging.info('step 4: filter charger')
     post_charger_out_fp = os.path.join(
         post_charger_out, '{s}.charged2vcf.tsv'.format(s=args.sample))
-    filter_charger(
+    cmd = filter_charger(
         args.filter_charger_script, post_charger_out_fp, args.sample,
         filter_charger_out, rare_threshold=args.rare_threshold)
     logging.info('executing command: {c}'.format(c=cmd))
