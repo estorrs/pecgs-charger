@@ -53,7 +53,7 @@ inputs:
     position: '0'
     prefix: --sample
   type: string?
-- default: '.0005'
+- default: '0.0005'
   id: rare_threshold
   inputBinding:
     position: '0'
@@ -70,7 +70,7 @@ outputs:
   type: File
 - id: rare_threshold_filtered_tsv
   outputBinding:
-    glob: output/4.filter_charger/$(inputs.sample).charged2vcf.filtered.af0$(inputs.rare_threshold).tsv
+    glob: output/4.filter_charger/$(inputs.sample).charged2vcf.filtered.af$(inputs.rare_threshold).tsv
   type: File
 requirements:
 - class: DockerRequirement
