@@ -58,7 +58,7 @@ inputs:
   inputBinding:
     position: '0'
     prefix: --rare-threshold
-  type: float?
+  type: string?
 - default: /miniconda/envs/charger/bin:$PATH
   id: environ_PATH
   type: string?
