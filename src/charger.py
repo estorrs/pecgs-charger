@@ -129,6 +129,10 @@ def run_charger(
     output = subprocess.check_output(cmd, shell=True)
     logging.info('step output: {o}'.format(o=output))
 
+    # pause to allow file cache to catch up on compute1
+    logging.info('waiting for compute1 file caching')
+    subprocess.check_output('sleep 300', shell=True)
+
     logging.info('step 3: postprocess charger')
     cmd = post_charger(
         args.post_charger_script, preprocessed_vcf, charger_out_fp,
@@ -136,6 +140,10 @@ def run_charger(
     logging.info('executing command: {c}'.format(c=cmd))
     output = subprocess.check_output(cmd, shell=True)
     logging.info('step output: {o}'.format(o=output))
+
+    # pause to allow file cache to catch up on compute1
+    logging.info('waiting for compute1 file caching')
+    subprocess.check_output('sleep 60', shell=True)
 
     logging.info('step 4: filter charger')
     post_charger_out_fp = os.path.join(
