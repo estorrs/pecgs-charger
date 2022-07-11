@@ -233,20 +233,11 @@ def main():
 
 	# Open input files
 	if ".gz" in inputVCF:
-		try:
-			vcf=gzip.open(inputVCF, 'rt')
-		except IOError:
-			print("Input vcf.gz file does not exist!")
+		vcf=gzip.open(inputVCF, 'rt')
 	else:
-		try:
-			vcf=open(inputVCF, 'r')
-		except IOError:
-			print("Input vcf file does not exist!")
+		vcf=open(inputVCF, 'r')
 
-	try:
-		tsv=open(charger)
-	except IOError:
-		print("Input CharGer file does not exist!")
+	tsv=open(charger)
 
 	# Open output file
 	outFilename=outputDirectory+sampleID+".charged2vcf.tsv"

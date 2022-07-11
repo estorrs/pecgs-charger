@@ -10,7 +10,7 @@
         - Filter out synonymous variants;
         - Filter out variants with CharGer score < 4.
 
-    It will also create a file containing only variants passing a given MAF threshold (gnomAD_AF ≤ 0.05%, ExAC ≤ 0.05%, 1kg_AF ≤ 0.05% are kept, as well as variants missing from all databases).
+    It will also create a file containing only variants passing a given MAF threshold (gnomAD_AF less than or equal 0.05%, ExAC less than or equal 0.05%, 1kg_AF less than or equal 0.05% are kept, as well as variants missing from all databases).
 
     Usage:
         python filter_CharGer.py -c [input CharGer file] -a [MAF threshold] -o [output file basename] -O [output directory]
